@@ -23,14 +23,41 @@ An enterprise Fortune 500-grade interactive diagnostic portal and proctored exam
 - Executive Header with Google profile status, verified streak, Debugging IQ score, and bonus wheel trigger.
 - Corporate governance footer with zero fake links, genuine evaluation rubrics, and SarlaYash Mission integrity charter.
 
-### 3. Integrated Interactive IDE
-- Syntax-highlighted code editor with line numbers, code reset, and instant error diagnostics.
-- Multi-tier Test Runner supporting public and **hidden test cases**.
-- Breakpoints and live runtime console terminal.
-- **Negative Marking Engine**: Incorrect test submissions deduct points from the candidate's IQ score (-10 XP penalty).
-- **Dynamic "Tip for Wrong Answers"**: Explains exact invariant violations upon test failure.
-- **Progressive Hints**: Tier 1, 2, and 3 hints with consultation penalty warnings.
-- **Reveal Solution & Errors**: Available **strictly in Practice Mode**; completely disabled in the Final Assessment.
+### 3. The 3-Level Gated Journey
+- **Level 1: Foundation & Diagnostic Mindset**: Core language syntax invariants, code reading, foundational MCQs, initial challenge badges.
+- **Level 2: Systems, Concurrency & AI Engineering**: Multi-threading, memory boundaries, Claude Code / Cursor tool calling deadlocks, advanced placement rounds.
+- **Level 3: Fortune 500 Executive Mastery & Placement Defense**: 3-Hour Strict Proctored Assessment, zero-tolerance anti-cheat defense, and exclusive Kapil-signed certification.
+
+### 4. Interactive Guided Demo Tour & Platform Sitemap
+- **Guided Demo Tour Navigation**: Step-by-step interactive onboarding modal introducing learners to left navigation, level gating, IDE test runners, MCQ arenas, and proctor rules.
+- **Enterprise Platform Sitemap**: Complete interactive architectural index with direct jump-links to all 14+ language domains, tools, placement arenas, and credential registries.
+
+### 5. WIIFM (What's In It For Me?) Stakeholder Matrix
+- Tailored value propositions and quantified ROI metrics for:
+  1. **Learners & Students**: Edge-case intuition, placement differentiation, verifiable Kapil-signed credentials.
+  2. **Viewers & Observers**: Instant zero-setup in-browser code exploration, gamified bonus wheel.
+  3. **Working Professionals (SWE, SRE, Tech Leads)**: Eliminating on-call fire drills, auditing AI agent code, solving race conditions.
+  4. **Training & Placement Officers (TPOs)**: 100% cheat-proof proctored benchmarking, elevated campus placement packages.
+  5. **HR & Technical Recruiters**: Cutting interview screening cycles, zero resume padding, proof of real debugging speed.
+  6. **CXO Levels (CTOs, VPs of Eng, Directors)**: Slashing P99 incident MTTR, standardizing reliability culture, safe enterprise AI scaling.
+
+### 6. Diagnostic Code-Snippet MCQ Arena (14+ Domains & 30 MCQs Each)
+- **10 Easy, 10 Medium, 10 Hard MCQs per Domain** covering:
+  - **HTML & Web Standards**: Void tags, DOM injection, async/defer races, Shadow DOM event retargeting.
+  - **C Programming**: Dangling stack pointers, format string CVEs, malloc/free leaks, integer overflows.
+  - **C++ Systems**: Iterator invalidation, shared_ptr reference cycles, use-after-move in lambdas.
+  - **Java Enterprise**: ConcurrentModificationException, ThreadLocal memory leaks, SimpleDateFormat concurrency.
+  - **Python 3**: Mutable default arguments, late-binding closures, subprocess pipe deadlocks.
+  - **JavaScript & TypeScript**: Lexicographical array sort, lost this binding, microtask starvation.
+  - **SQL & Relational DBs**: Three-valued logic NULLs, unindexed B-Tree scans, phantom reads in REPEATABLE READ.
+  - **Microsoft Excel & Formulas**: VLOOKUP range lookup, circular references, #SPILL! dynamic array errors.
+  - **Power BI & DAX**: Row vs filter context, CALCULATE context transition, bi-directional filter loops.
+  - **GitHub Copilot Debugging**: Outdated deprecated methods, insecure cryptography, context window drift.
+  - **Prompt Engineering for Code**: Ambiguous JSON outputs, indirect prompt injection in code, tool schema validation.
+  - **Test Commands & QA Tools**: Missing await in Jest assertions, mock state pollution, Playwright flaky locators.
+  - **Shell / Bash Scripts**: Unquoted variable word splitting, subshell pipeline variable loss, pipefail omission.
+  - **PowerShell Automation**: Native executable exit codes, pipeline array unwrapping, $using: thread safety.
+- Complete with realistic code snippets, 4 options, instant grading, **negative marking (-5 XP on errors)**, architectural explanations, and **Kapil's Diagnostic Tips**.
 
 ### 4. Fortune 500 Bonus Spinning Wheel
 - Interactive SVG/Canvas wheel with authentic rotation physics and confetti rewards.
