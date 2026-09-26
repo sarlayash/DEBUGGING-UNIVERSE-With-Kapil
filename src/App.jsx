@@ -17,6 +17,7 @@ import McqArena from './components/McqArena';
 import WiifmHub from './components/WiifmHub';
 import DemoTourModal from './components/DemoTourModal';
 import SitemapModal from './components/SitemapModal';
+import PortalIntro from './components/PortalIntro';
 
 import { CHALLENGES_DATA } from './data/challengesData';
 import { 
@@ -37,7 +38,7 @@ import {
 } from './utils/firebase';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('practice');
+  const [activeTab, setActiveTab] = useState('intro');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isWheelOpen, setIsWheelOpen] = useState(false);
@@ -188,6 +189,14 @@ export default function App() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex flex-col">
           <div className="flex-1 max-w-7xl w-full mx-auto">
             {/* View Switcher */}
+            {activeTab === 'intro' && (
+              <PortalIntro
+                onNavigateTab={setActiveTab}
+                onOpenAuth={() => setIsAuthOpen(true)}
+                onOpenTour={() => setIsTourOpen(true)}
+              />
+            )}
+
             {activeTab === 'levels' && (
               <ThreeLevelsJourney
                 onNavigateTab={setActiveTab}

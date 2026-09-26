@@ -31,6 +31,11 @@ export default function Footer({ onOpenAuth, onSelectTab, onOpenSitemap, onOpenT
             </h4>
             <ul className="space-y-1.5 text-[11px]">
               <li>
+                <button onClick={() => onSelectTab('intro')} className="hover:text-slate-900 font-bold text-slate-900 transition-colors">
+                  &bull; Mission & Portal Introduction
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onSelectTab('levels')} className="hover:text-slate-900 font-medium transition-colors">
                   3-Level Gated Journey (L1, L2, L3)
                 </button>

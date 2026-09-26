@@ -20,6 +20,7 @@ import {
   Map,
   Users
 } from 'lucide-react';
+import kapilPortrait from '../assets/kapil-portrait.jpg';
 
 export default function Sidebar({ 
   activeTab, 
@@ -35,6 +36,14 @@ export default function Sidebar({
   onOpenSitemap
 }) {
   const navItems = [
+    {
+      id: 'intro',
+      label: 'Mission & Intro',
+      icon: Sparkles,
+      badge: 'Official',
+      badgeColor: 'bg-amber-50 text-amber-900 border-amber-200',
+      description: 'Kapil & SarlaYash Mission Overview'
+    },
     {
       id: 'levels',
       label: '3-Level Journey',
@@ -136,15 +145,17 @@ export default function Sidebar({
       <div className="p-4 border-b border-slate-200 flex items-center justify-between">
         {!collapsed ? (
           <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                DU
-              </div>
+            <div className="flex items-center gap-2.5">
+              <img 
+                src={kapilPortrait} 
+                alt="Kapil" 
+                className="w-10 h-10 rounded-xl object-cover border border-slate-300 shadow-xs shrink-0"
+              />
               <div>
                 <h1 className="font-extrabold text-sm tracking-tight text-slate-900 leading-tight">
                   DEBUGGING UNIVERSE
                 </h1>
-                <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">
                   With Kapil
                 </div>
               </div>
@@ -155,9 +166,11 @@ export default function Sidebar({
             </div>
           </div>
         ) : (
-          <div className="w-10 h-10 mx-auto rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-base shadow-sm">
-            DU
-          </div>
+          <img 
+            src={kapilPortrait} 
+            alt="Kapil" 
+            className="w-10 h-10 mx-auto rounded-xl object-cover border border-slate-300 shadow-xs"
+          />
         )}
 
         <button 

@@ -21,11 +21,19 @@ export default function SitemapModal({ isOpen, onClose, onSelectTab }) {
 
   const sitemapSections = [
     {
+      title: 'Portal Overview & Mission',
+      icon: CheckCircle2,
+      items: [
+        { label: 'Portal Introduction & Welcome by Kapil', tab: 'intro', desc: 'SarlaYash Mission, official portrait poster, core pillars & founder manifesto' },
+        { label: 'WIIFM Stakeholder Value Matrix', tab: 'wiifm', desc: 'Benefits tailored for Learners, Working Professionals, TPOs, HRs & CXOs' }
+      ]
+    },
+    {
       title: '3-Level Core Progression Roadmap',
       icon: Layers,
       items: [
-        { label: 'Level 1: Foundation & Diagnostic Mindset', tab: 'practice', desc: 'Syntax invariants, code reading, foundational MCQs' },
-        { label: 'Level 2: Systems, Concurrency & AI Engineering', tab: 'practice', desc: 'Race conditions, memory leaks, Claude Code & Cursor tool deadlocks' },
+        { label: 'Level 1: Foundation & Diagnostic Mindset', tab: 'levels', desc: 'Syntax invariants, code reading, foundational MCQs' },
+        { label: 'Level 2: Systems, Concurrency & AI Engineering', tab: 'levels', desc: 'Race conditions, memory leaks, Claude Code & Cursor tool deadlocks' },
         { label: 'Level 3: Executive Mastery & Placement Defense', tab: 'assessment', desc: '3-Hour strict proctored assessment & Kapil signed certification' }
       ]
     },
