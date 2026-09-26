@@ -126,3 +126,21 @@ export async function fetchLearnerStateFromFirestore(uid) {
     return null;
   }
 }
+
+/**
+ * Sync Learner Profile to Cloud Firestore
+ */
+export async function syncLearnerProfileToFirestore(profile) {
+  if (!profile || !profile.email) return;
+  try {
+    const safeId = profile.uid || profile.googleId || profile.email.replace(/[^a-zA-Z0-9]/g, '_');
+    const userRef = doc(db, 'learners', safeId);
+    await setDoc(userRef, {
+      profile,
+      lastActive: new Date().toISOString()
+    }, { merge: true });
+  } catch (fsError) {
+    console.warn('Firestore profile sync notice:', fsError.message);
+  }
+}
+
