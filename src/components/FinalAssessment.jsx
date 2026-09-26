@@ -18,6 +18,7 @@ import {
   Award
 } from 'lucide-react';
 import { CHALLENGES_DATA } from '../data/challengesData';
+import { shuffleArray } from '../data/mcqDebuggingData';
 import { 
   getFinalAssessmentStatus, 
   saveFinalAssessmentStatus, 
@@ -210,14 +211,14 @@ export default function FinalAssessment({ userProfile, onOpenAuth, onAssessmentC
       return;
     }
 
-    // Pick 5 non-repeated questions (3 Hard, 2 Medium = 60% Hard)
-    const hardPool = CHALLENGES_DATA.filter(c => c.difficulty === 'Hard');
-    const medPool = CHALLENGES_DATA.filter(c => c.difficulty !== 'Hard');
+    // Pick 5 non-repeated questions with random shuffle (3 Hard, 2 Medium = 60% Hard)
+    const hardPool = shuffleArray(CHALLENGES_DATA.filter(c => c.difficulty === 'Hard'));
+    const medPool = shuffleArray(CHALLENGES_DATA.filter(c => c.difficulty !== 'Hard'));
 
-    const selected = [
+    const selected = shuffleArray([
       ...hardPool.slice(0, 3),
       ...medPool.slice(0, 2)
-    ];
+    ]);
 
     setExamQuestions(selected);
     setCurrentQuestionIndex(0);
