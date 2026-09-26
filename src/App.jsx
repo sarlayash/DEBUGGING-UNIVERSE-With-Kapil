@@ -20,6 +20,8 @@ import SitemapModal from './components/SitemapModal';
 import PortalIntro from './components/PortalIntro';
 import LorView from './components/LorView';
 import ProgressReportView from './components/ProgressReportView';
+import AccountLockModal from './components/AccountLockModal';
+import { ShieldAlert } from 'lucide-react';
 
 import { CHALLENGES_DATA } from './data/challengesData';
 import { 
@@ -29,7 +31,8 @@ import {
   getSolvedChallenges, 
   getScoreStats, 
   getFinalAssessmentStatus,
-  awardBadge
+  awardBadge,
+  getAccountLock
 } from './utils/storage';
 import { 
   auth, 
@@ -56,6 +59,23 @@ export default function App() {
   const [selectedChallenge, setSelectedChallenge] = useState(CHALLENGES_DATA[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [negativeMarkingEnabled, setNegativeMarkingEnabled] = useState(true);
+
+  // 24-Hour Anti-Cheat Lockout State
+  const [accountLockState, setAccountLockState] = useState(getAccountLock());
+  const [isLockModalOpen, setIsLockModalOpen] = useState(false);
+
+  useEffect(() => {
+    const checkLock = () => {
+      const lock = getAccountLock();
+      setAccountLockState(lock);
+      if (lock.isLocked && userProfile) {
+        handleLogout();
+      }
+    };
+    checkLock();
+    const interval = setInterval(checkLock, 2000);
+    return () => clearInterval(interval);
+  }, [userProfile]);
 
   // Sync state on mount and updates
   const refreshStats = (currentUid = userProfile?.uid) => {
@@ -172,6 +192,22 @@ export default function App() {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        {/* Anti-Cheat 24-Hour Active Lockout Sticky Alert Banner */}
+        {accountLockState.isLocked && (
+          <div className="bg-red-600 text-white px-4 py-2.5 text-xs font-bold flex flex-wrap items-center justify-between gap-3 shadow-md border-b border-red-700 z-30 shrink-0">
+            <div className="flex items-center gap-2">
+              <ShieldAlert size={16} className="text-white shrink-0 animate-pulse" />
+              <span>⚠️ 24-HOUR ANTI-CHEAT LOCKOUT ACTIVE: Candidate login and evaluations suspended. Forensic alert sent to kapilnarula27july@gmail.com and namaste@sarlayash.com.</span>
+            </div>
+            <button
+              onClick={() => setIsLockModalOpen(true)}
+              className="px-3 py-1 bg-white hover:bg-red-50 text-red-700 rounded-lg text-xs font-black shadow-xs shrink-0 cursor-pointer"
+            >
+              View Lockout Status ({Math.max(0, Math.floor(accountLockState.remainingMs / 3600000))}h left)
+            </button>
+          </div>
+        )}
+
         {/* Top Header */}
         <Header
           userProfile={userProfile}
@@ -351,6 +387,17 @@ export default function App() {
         isOpen={isSitemapOpen}
         onClose={() => setIsSitemapOpen(false)}
         onSelectTab={setActiveTab}
+      />
+
+      {/* 24-Hour Anti-Cheat Account Lockout Modal */}
+      <AccountLockModal
+        isOpen={isLockModalOpen}
+        onClose={() => setIsLockModalOpen(false)}
+        userProfile={userProfile}
+        onForceRefresh={() => {
+          setAccountLockState(getAccountLock());
+          refreshStats();
+        }}
       />
     </div>
   );

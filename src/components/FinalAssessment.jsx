@@ -15,7 +15,9 @@ import {
   HelpCircle,
   EyeOff,
   Flame,
-  Award
+  Award,
+  Mail,
+  RefreshCw
 } from 'lucide-react';
 import { CHALLENGES_DATA } from '../data/challengesData';
 import { shuffleArray } from '../data/mcqDebuggingData';
@@ -26,8 +28,11 @@ import {
   updateScore,
   getSolvedChallenges,
   getPatternsStudied,
-  getInterviewsCompleted
+  getInterviewsCompleted,
+  getAccountLock,
+  clearAccountLock
 } from '../utils/storage';
+import { reportCheatingIncident, NOTIFIED_SECURITY_EMAILS } from '../utils/antiCheatService';
 import confetti from 'canvas-confetti';
 
 const TOTAL_EXAM_SECONDS = 3 * 60 * 60; // 3 Hours (180 minutes)
@@ -105,6 +110,19 @@ export default function FinalAssessment({ userProfile, onOpenAuth, onAssessmentC
 
       saveFinalAssessmentStatus(disqualifiedPayload);
       setAssessmentState(disqualifiedPayload);
+
+      // Report Cheating Incident: Enforces 24h lockout & dispatches email to kapilnarula27july@gmail.com and namaste@sarlayash.com
+      reportCheatingIncident({
+        candidateName: userProfile?.name || 'Verified Google Candidate',
+        candidateEmail: userProfile?.email || 'authenticated.session@google.com',
+        candidateUid: userProfile?.uid || 'ANONYMOUS',
+        violationReason: reason,
+        examContext: {
+          currentQuestionIndex,
+          examSecondsRemaining,
+          score: examScore
+        }
+      });
 
       // Play alert tone if audio context supported
       try {
@@ -348,44 +366,108 @@ export default function FinalAssessment({ userProfile, onOpenAuth, onAssessmentC
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // 1. DISQUALIFIED SCREEN (No Retry)
-  if (assessmentState.status === 'DISQUALIFIED') {
+  // 1. DISQUALIFIED SCREEN (24-Hour Quarantine & Email Alert Dispatched)
+  if (assessmentState.status === 'DISQUALIFIED' || getAccountLock().isLocked) {
+    const lock = getAccountLock();
+    const remainingSec = Math.max(0, Math.floor((lock.remainingMs || (24 * 60 * 60 * 1000)) / 1000));
+    const remH = Math.floor(remainingSec / 3600);
+    const remM = Math.floor((remainingSec % 3600) / 60);
+    const remS = remainingSec % 60;
+    const pad = (n) => String(n).padStart(2, '0');
+
     return (
-      <div className="bg-white border-2 border-red-500 rounded-2xl p-8 shadow-xl text-center space-y-6 max-w-3xl mx-auto my-8">
-        <div className="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto border-2 border-red-300">
-          <ShieldAlert size={36} />
+      <div className="bg-white border-4 border-red-600 rounded-3xl p-8 shadow-2xl text-center space-y-6 max-w-3xl mx-auto my-8">
+        <div className="w-20 h-20 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mx-auto border-2 border-red-300 shadow-inner">
+          <ShieldAlert size={44} className="animate-pulse" />
         </div>
 
         <div>
-          <span className="px-3 py-1 rounded bg-red-100 text-red-800 text-xs font-bold uppercase tracking-wider">
-            Integrity Violation &bull; Proctor Lockdown
+          <span className="px-3.5 py-1.5 rounded-full bg-red-100 text-red-800 text-xs font-black uppercase tracking-wider border border-red-200">
+            Proctor Security Quarantine &bull; Login Suspended
           </span>
-          <h2 className="text-2xl font-black text-slate-900 mt-2 tracking-tight">
-            ASSESSMENT TERMINATED: CANDIDATE DISQUALIFIED
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-3 tracking-tight">
+            ASSESSMENT TERMINATED & ACCOUNT LOCKED
           </h2>
-          <p className="text-sm text-red-600 font-semibold mt-1">
-            STRICT POLICY ENFORCED: NO RETRY PERMITTED
+          <p className="text-sm text-red-600 font-bold mt-1">
+            24-HOUR COMPLETE AUTHENTICATION & EVALUATION LOCKOUT ENFORCED
           </p>
         </div>
 
-        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-left space-y-2">
-          <div className="font-bold text-slate-900 border-b border-slate-200 pb-1.5 flex items-center justify-between">
-            <span>Official Incident Report (Kapil / SarlaYash Mission)</span>
-            <span className="text-[11px] text-red-600 font-mono">SEALED</span>
+        {/* 24-Hour Live Countdown Timer */}
+        <div className="p-5 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center space-y-1">
+          <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <Clock size={14} className="text-red-600" />
+            <span>24-Hour Lockout Remaining</span>
           </div>
-          <div className="text-slate-700">
-            <strong>Candidate:</strong> {userProfile?.name || 'Verified Google Candidate'} ({userProfile?.email || 'Authenticated Session'})
+          <div className="font-mono text-3xl sm:text-4xl font-black text-slate-900 tracking-widest">
+            {pad(remH)} : {pad(remM)} : {pad(remS)}
           </div>
-          <div className="text-slate-700">
-            <strong>Violation Reason:</strong> {assessmentState.disqualificationReason || 'Alt+Tab / Screenshot / Tab Switch violation recorded.'}
-          </div>
-          <div className="text-slate-700">
-            <strong>Proctor Action:</strong> Assessment instantly auto-closed and permanently sealed. No retries permitted pursuant to Fortune 500 assessment guidelines.
+          <div className="text-[11px] text-slate-500">
+            Login and exam access will automatically restore on: <strong>{lock.expiresDateStr || 'After 24 Hours'}</strong>
           </div>
         </div>
 
-        <div className="text-xs text-slate-500">
-          If you believe this violation was caused by an OS hardware error, appeal directly to SarlaYash Mission Academic Board signed by Kapil.
+        {/* Official Email Notification Dispatched Banner */}
+        <div className="p-5 bg-slate-950 text-white rounded-2xl text-left space-y-2 border border-slate-800">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div className="flex items-center gap-2 font-black text-emerald-400 text-xs uppercase tracking-wider">
+              <CheckCircle2 size={16} />
+              <span>Incident Dispatched to Authorized Signatories</span>
+            </div>
+            <span className="text-[10px] font-mono bg-red-500/20 text-red-400 px-2 py-0.5 rounded border border-red-500/30 font-bold">
+              HIGH PRIORITY
+            </span>
+          </div>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            In compliance with SarlaYash Mission examination integrity standards, an automated forensic incident alert has been dispatched to:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-xs">
+            <div className="flex items-center gap-2 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+              <Mail size={14} className="text-amber-400 shrink-0" />
+              <span className="text-slate-200">kapilnarula27july@gmail.com</span>
+            </div>
+            <div className="flex items-center gap-2 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+              <Mail size={14} className="text-amber-400 shrink-0" />
+              <span className="text-slate-200">namaste@sarlayash.com</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Incident Details Card */}
+        <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-left space-y-2">
+          <div className="font-bold text-slate-900 border-b border-slate-200 pb-1.5 flex items-center justify-between">
+            <span>Forensic Incident Log (Kapil / SarlaYash Mission)</span>
+            <span className="text-[11px] text-red-600 font-mono font-bold">SEALED AUDIT</span>
+          </div>
+          <div className="text-slate-700">
+            <strong>Candidate Identity:</strong> {userProfile?.name || 'Verified Google Candidate'} ({userProfile?.email || 'Authenticated Session'})
+          </div>
+          <div className="text-slate-700">
+            <strong>Violation Detected:</strong> {assessmentState.disqualificationReason || lock.reason || 'Alt+Tab / Screenshot / Tab Switch violation recorded.'}
+          </div>
+          <div className="text-slate-700">
+            <strong>Enforcement Protocol:</strong> Session immediately terminated, assessment permanently voided with 0 score, candidate login quarantined across all evaluative modules for 24 hours.
+          </div>
+        </div>
+
+        {/* Admin Emergency Reset Button for Testing / Verification */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onClick={() => {
+              clearAccountLock();
+              saveFinalAssessmentStatus({ status: 'READY', passed: false, score: 0 });
+              setAssessmentState({ status: 'READY', passed: false, score: 0 });
+            }}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-300"
+            title="Reset lockout for testing purposes"
+          >
+            <RefreshCw size={13} />
+            <span>Admin / Tester: Emergency Reset Lockout (For Verification Testing)</span>
+          </button>
+        </div>
+
+        <div className="text-xs text-slate-400">
+          For formal academic appeals or hardware error disputes, contact SarlaYash Mission Academic Integrity Board signed by Kapil.
         </div>
       </div>
     );
@@ -459,6 +541,40 @@ export default function FinalAssessment({ userProfile, onOpenAuth, onAssessmentC
             <span className="text-xs text-slate-400 hidden sm:inline">
               Anti-Screenshot & Alt-Tab Lock Engaged &bull; Candidate: {userProfile?.name}
             </span>
+            <button
+              onClick={() => {
+                const nowStr = new Date().toLocaleTimeString();
+                const reason = 'Manual Anti-Cheat Verification: Candidate triggered test infraction to verify email dispatch to kapilnarula27july@gmail.com and namaste@sarlayash.com and 24-hour lockout.';
+                const disqualifiedPayload = {
+                  status: 'DISQUALIFIED',
+                  startTime: assessmentState.startTime,
+                  endTime: Date.now(),
+                  disqualificationReason: `${reason} (Detected at ${nowStr})`,
+                  disqualifiedAt: new Date().toISOString(),
+                  score: 0,
+                  passed: false,
+                  certificateId: null,
+                  violations: [reason]
+                };
+                saveFinalAssessmentStatus(disqualifiedPayload);
+                setAssessmentState(disqualifiedPayload);
+                reportCheatingIncident({
+                  candidateName: userProfile?.name || 'Verified Google Candidate',
+                  candidateEmail: userProfile?.email || 'authenticated.session@google.com',
+                  candidateUid: userProfile?.uid || 'ANONYMOUS',
+                  violationReason: reason,
+                  examContext: {
+                    currentQuestionIndex,
+                    examSecondsRemaining,
+                    score: examScore
+                  }
+                });
+              }}
+              className="px-2.5 py-1 rounded bg-red-600/30 hover:bg-red-600/60 border border-red-500/80 text-red-200 text-[10px] font-black transition-all"
+              title="Test cheating case: triggers email to kapilnarula27july@gmail.com & namaste@sarlayash.com and locks login for 24 hours"
+            >
+              ⚠️ Test Anti-Cheat Trigger & 24h Lockout
+            </button>
           </div>
 
           {/* Timers */}

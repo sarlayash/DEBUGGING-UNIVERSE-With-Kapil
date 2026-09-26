@@ -10,6 +10,8 @@ const STORAGE_KEYS = {
   FINAL_ASSESSMENT: 'du_final_assessment_status',
   INTERVIEWS_COMPLETED: 'du_interviews_completed',
   PATTERNS_STUDIED: 'du_patterns_studied',
+  ACCOUNT_LOCKED_UNTIL: 'du_account_locked_until',
+  ACCOUNT_LOCK_REASON: 'du_account_lock_reason',
 };
 
 // Default Google Guest User (Requires signing in with Google for official verification & certification)
@@ -197,3 +199,68 @@ export const markPatternStudied = (patternId) => {
     console.error('Failed to mark pattern studied', e);
   }
 };
+
+/**
+ * Check if the current candidate/browser is under an active 24-hour anti-cheat lockout
+ */
+export const getAccountLock = () => {
+  try {
+    const lockedUntilStr = localStorage.getItem(STORAGE_KEYS.ACCOUNT_LOCKED_UNTIL);
+    const reason = localStorage.getItem(STORAGE_KEYS.ACCOUNT_LOCK_REASON) || 'Anti-cheat integrity violation';
+    
+    if (!lockedUntilStr) {
+      return { isLocked: false, remainingMs: 0, lockedUntil: null, reason: null };
+    }
+
+    const lockedUntil = parseInt(lockedUntilStr, 10);
+    const now = Date.now();
+
+    if (now < lockedUntil) {
+      const remainingMs = lockedUntil - now;
+      return {
+        isLocked: true,
+        remainingMs,
+        lockedUntil,
+        reason,
+        expiresDateStr: new Date(lockedUntil).toLocaleString()
+      };
+    } else {
+      // Lock expired after 24 hours
+      clearAccountLock();
+      return { isLocked: false, remainingMs: 0, lockedUntil: null, reason: null };
+    }
+  } catch (e) {
+    return { isLocked: false, remainingMs: 0, lockedUntil: null, reason: null };
+  }
+};
+
+/**
+ * Enforce 24-Hour Anti-Cheat Lockout
+ */
+export const setAccountLock = (reason, durationMs = 24 * 60 * 60 * 1000) => {
+  try {
+    const lockedUntil = Date.now() + durationMs;
+    localStorage.setItem(STORAGE_KEYS.ACCOUNT_LOCKED_UNTIL, lockedUntil.toString());
+    localStorage.setItem(STORAGE_KEYS.ACCOUNT_LOCK_REASON, reason);
+    return {
+      isLocked: true,
+      lockedUntil,
+      reason,
+      remainingMs: durationMs,
+      expiresDateStr: new Date(lockedUntil).toLocaleString()
+    };
+  } catch (e) {
+    console.error('Failed to set account lockout', e);
+  }
+};
+
+/**
+ * Clear lockout (upon 24h expiration or admin override)
+ */
+export const clearAccountLock = () => {
+  try {
+    localStorage.removeItem(STORAGE_KEYS.ACCOUNT_LOCKED_UNTIL);
+    localStorage.removeItem(STORAGE_KEYS.ACCOUNT_LOCK_REASON);
+  } catch (e) {}
+};
+

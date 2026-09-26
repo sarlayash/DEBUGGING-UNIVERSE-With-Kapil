@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ShieldCheck, AlertCircle, Check, Sparkles, RefreshCw, UserCheck, CheckCircle2, ExternalLink } from 'lucide-react';
-import { saveUserProfile } from '../utils/storage';
+import { saveUserProfile, getAccountLock, clearAccountLock } from '../utils/storage';
 import { auth, onAuthStateChanged, signInWithGoogleFirebase, syncLearnerProfileToFirestore } from '../utils/firebase';
+import { NOTIFIED_SECURITY_EMAILS } from '../utils/antiCheatService';
 import confetti from 'canvas-confetti';
 
 export default function GoogleAuthModal({ isOpen, onClose, onAuthSuccess }) {
@@ -42,12 +43,16 @@ export default function GoogleAuthModal({ isOpen, onClose, onAuthSuccess }) {
 
   // Primary Google Sign-In with automatic cross-origin popup detection
   const handleFirebaseGoogleLogin = async () => {
+    const lock = getAccountLock();
+    if (lock.isLocked) {
+      setError(`⚠️ LOGIN LOCKED: Account suspended for 24 hours until ${lock.expiresDateStr} due to anti-cheat violation (${lock.reason}). Security alert dispatched to kapilnarula27july@gmail.com and namaste@sarlayash.com.`);
+      return;
+    }
+
     setIsLoading(true);
     setIsPopupActive(true);
     setError('');
 
-    // Setup active listeners to detect successful authentication in the popup window
-    // before the popup window closes or even if browser security prevents auto-close
     cleanupListeners();
 
     authUnsubRef.current = onAuthStateChanged(auth, (fbUser) => {
@@ -227,13 +232,72 @@ export default function GoogleAuthModal({ isOpen, onClose, onAuthSuccess }) {
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 space-y-4">
-          <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
-            <ShieldCheck size={16} className="text-amber-700 mt-0.5 flex-shrink-0" />
-            <div className="leading-relaxed">
-              <strong>Fortune 500 Compliance Protocol:</strong> For certificate credibility and anti-cheat tracking, only authentic Google accounts are accepted. Certificates are verified and signed exclusively by <strong>Kapil</strong>.
+        {getAccountLock().isLocked ? (
+          <div className="p-6 space-y-4 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mx-auto border-2 border-red-300 shadow-inner">
+              <AlertCircle size={36} className="animate-pulse" />
+            </div>
+            <div>
+              <span className="px-3 py-1 rounded-full bg-red-100 text-red-800 text-[10px] font-black uppercase tracking-wider border border-red-200">
+                24-Hour Quarantine Active
+              </span>
+              <h3 className="text-lg font-black text-slate-900 mt-2">
+                Authentication Access Locked
+              </h3>
+              <p className="text-xs text-red-600 font-bold mt-1">
+                Account suspended from logging in due to anti-cheat infraction
+              </p>
+            </div>
+
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Lockout Time Remaining
+              </div>
+              <div className="font-mono text-2xl font-black text-slate-900">
+                {Math.max(0, Math.floor(getAccountLock().remainingMs / 3600000))}h {Math.max(0, Math.floor((getAccountLock().remainingMs % 3600000) / 60000))}m remaining
+              </div>
+              <div className="text-[10px] text-slate-500">
+                Access restored on: <strong>{getAccountLock().expiresDateStr}</strong>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-slate-900 text-white rounded-xl text-left text-xs space-y-1.5">
+              <div className="font-bold text-emerald-400 flex items-center gap-1.5 text-[11px]">
+                <CheckCircle2 size={13} />
+                <span>Notice Dispatched to Authorized Inboxes:</span>
+              </div>
+              <div className="font-mono text-[10px] text-slate-300 space-y-0.5 pl-2 border-l border-slate-700">
+                <div>&bull; kapilnarula27july@gmail.com</div>
+                <div>&bull; namaste@sarlayash.com</div>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-slate-500 text-left bg-red-50 p-2.5 rounded-lg border border-red-100">
+              <span className="font-bold text-red-900">Infraction Reason:</span> <span className="text-red-700">{getAccountLock().reason}</span>
+            </div>
+
+            {/* Admin Emergency Reset Button for Testing / Verification */}
+            <div className="pt-2">
+              <button
+                onClick={() => {
+                  clearAccountLock();
+                  setError('');
+                }}
+                className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-300 flex items-center justify-center gap-1.5"
+              >
+                <RefreshCw size={13} />
+                <span>Admin / Tester: Emergency Reset Lockout</span>
+              </button>
             </div>
           </div>
+        ) : (
+          <div className="p-6 space-y-4">
+            <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+              <ShieldCheck size={16} className="text-amber-700 mt-0.5 flex-shrink-0" />
+              <div className="leading-relaxed">
+                <strong>Fortune 500 Compliance Protocol:</strong> For certificate credibility and anti-cheat tracking, only authentic Google accounts are accepted. Certificates are verified and signed exclusively by <strong>Kapil</strong>.
+              </div>
+            </div>
 
           {/* Active Popup Guidance Notice */}
           {isPopupActive && (
@@ -353,6 +417,7 @@ export default function GoogleAuthModal({ isOpen, onClose, onAuthSuccess }) {
             </button>
           </div>
         </div>
+        )}
 
         {/* Modal Footer */}
         <div className="p-3 bg-slate-50 border-t border-slate-100 text-center text-[10px] text-slate-400">
