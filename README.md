@@ -1,0 +1,87 @@
+# DEBUGGING UNIVERSE With Kapil
+### Powered By SarlaYash Mission
+
+An enterprise Fortune 500-grade interactive diagnostic portal and proctored examination engine designed to build world-class software reliability, distributed systems mastery, and agentic AI debugging excellence.
+
+---
+
+## 🌟 Core Architecture & Capabilities
+
+### 1. Multi-Language & All AI Portals Coverage
+- **Systems & Backend Languages**: Python 3.12 (Asyncio, concurrency locks), Go 1.23 (channel deadlocks & goroutine leaks), Rust 1.80 (borrow checker, safe aliasing), C++20 (off-by-one buffer overruns, memory boundaries), Java 21 (Java Memory Model, volatile visibility), C# 12 (.NET 8 async deadlock), SQL (Postgres concurrency locks & SELECT FOR UPDATE), Swift 6 (Actor isolation & Sendable closures), Kotlin 2.0 (SupervisorJob cancellation leaks), PHP 8.3 (Type juggling bypass & constant-time auth), Shell / Bash (Quoting, injection prevention).
+- **All AI Developer Portals & Modern Tooling**:
+  - **Claude Code**: Agentic tool invocation parameter deadlocks, JSON Schema validation recovery.
+  - **Cursor**: Composer import hallucinations, ghost dependency elimination, `.cursorrules` enforcement.
+  - **Google Antigravity / Gemini CLI**: Context payload truncation (46,080 byte limits) and offset-based streaming.
+  - **Windsurf**: Cascade context invalidation, optimistic hash verification, stale diff handling.
+  - **GitHub Copilot**: ReDoS catastrophic backtracking in generated regexes.
+  - **Devin / Aider**: Git rebase merge conflict markers and automated semantic reconciliation.
+
+### 2. Fortune 500 Executive Design System
+- Sleek **White and Grey** executive theme (`#ffffff`, `#f8fafc`, `#e2e8f0`, `#0f172a`).
+- Left-hand collapsible navigation bar with live status indicators.
+- Executive Header with Google profile status, verified streak, Debugging IQ score, and bonus wheel trigger.
+- Corporate governance footer with zero fake links, genuine evaluation rubrics, and SarlaYash Mission integrity charter.
+
+### 3. Integrated Interactive IDE
+- Syntax-highlighted code editor with line numbers, code reset, and instant error diagnostics.
+- Multi-tier Test Runner supporting public and **hidden test cases**.
+- Breakpoints and live runtime console terminal.
+- **Negative Marking Engine**: Incorrect test submissions deduct points from the candidate's IQ score (-10 XP penalty).
+- **Dynamic "Tip for Wrong Answers"**: Explains exact invariant violations upon test failure.
+- **Progressive Hints**: Tier 1, 2, and 3 hints with consultation penalty warnings.
+- **Reveal Solution & Errors**: Available **strictly in Practice Mode**; completely disabled in the Final Assessment.
+
+### 4. Fortune 500 Bonus Spinning Wheel
+- Interactive SVG/Canvas wheel with authentic rotation physics and confetti rewards.
+- Bonuses: `+100 Bonus IQ Points`, `Streak Freeze Shield`, `Free Hint Pass (No Penalty)`, `Double XP Booster`, `Secret Bug Bounty Challenge Unlock`.
+
+### 5. Learning Patterns & Shortcuts Hubs
+- **Patterns Catalog**: In-depth analysis of 10+ architectural bugs (Off-By-One, Race Conditions, Memory Leaks, Event Loop Starvation, ReDoS, SQL N+1 Cascades) with real production outage case studies.
+- **Shortcuts Cheatsheets**: Keybindings for Cursor, VS Code, Chrome DevTools, JetBrains, GDB, and Git.
+
+### 6. Fortune 500 Placement Arena
+- Mock debugging interview rounds modeled after Google, Meta, Stripe, and Amazon Staff/Senior SWE criteria.
+
+### 7. The 3-Hour Strict Proctored Final Assessment
+- **3-Hour Mandatory Clock (180:00)**: Candidate **cannot finish or submit before 3 hours**, enforcing deep code audit and invariant review.
+- **Per-Question Timers**: 15:00 minutes per question countdown.
+- **60%+ Hard Question Complexity**: Multi-layered distributed concurrency, agentic AI deadlocks, and memory boundaries.
+- **Non-Repeated Questions**: Randomized unique question set drawn per candidate.
+- **Strict Anti-Cheat Proctoring**:
+  - Screenshot detection (`PrintScreen`, `Ctrl+Shift+S`, `Meta+Shift+3/4/S`).
+  - Alt+Tab / Tab Switch / Application Switch / Window Blur detection.
+  - Developer Tools inspection detection (`F12`, `Ctrl+Shift+I`).
+  - **AUTOMATIC IMMEDIATE CLOSURE WITH NO RETRY**: Any violation permanently disqualifies the candidate with zero retries permitted.
+
+### 8. Google Sign-Ups ONLY & Exclusive Kapil Certification
+- **Real Firebase SDK Integration**: Configured with the official Firebase project `debugging-universe-with-kapil`:
+  - `apiKey`: `AIzaSyAW90f2FXNWS42eLc5HOsVvutcal79r7A4`
+  - `authDomain`: `debugging-universe-with-kapil.firebaseapp.com`
+  - `projectId`: `debugging-universe-with-kapil`
+  - `storageBucket`: `debugging-universe-with-kapil.firebasestorage.app`
+  - `messagingSenderId`: `140286912116`
+  - `appId`: `1:140286912116:web:fbed28499eb2fea3f3d321`
+  - `measurementId`: `G-5VJE6J63LS`
+- Real **Google Sign-In Popup** (`signInWithPopup` + `GoogleAuthProvider`) and Cloud Firestore state synchronization (`db.collection('learners')`).
+- Authentication strictly limited to verified Google accounts (`@gmail.com` or Google Workspace).
+- Official printable and downloadable PDF Certificate issued **only** upon learning journey completion and clearing the 3-Hour Proctored Assessment.
+- **Sole Authorized Signatory: Kapil**, Founder & Chief Architect - SarlaYash Mission. No other signatory or fake personas.
+
+---
+
+## 🚀 Running Locally
+
+```bash
+# Navigate to project directory
+cd C:\Users\LC\.gemini\antigravity\scratch\debugging-universe-kapil
+
+# Install dependencies (already pre-configured)
+npm install
+
+# Start development server
+npm run dev
+
+# Build production bundle
+npm run build
+```
