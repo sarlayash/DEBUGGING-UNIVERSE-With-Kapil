@@ -18,6 +18,8 @@ import WiifmHub from './components/WiifmHub';
 import DemoTourModal from './components/DemoTourModal';
 import SitemapModal from './components/SitemapModal';
 import PortalIntro from './components/PortalIntro';
+import LorView from './components/LorView';
+import ProgressReportView from './components/ProgressReportView';
 
 import { CHALLENGES_DATA } from './data/challengesData';
 import { 
@@ -274,6 +276,7 @@ export default function App() {
                 userProfile={userProfile}
                 assessmentStatus={assessmentStatus}
                 onOpenAuth={() => setIsAuthOpen(true)}
+                onNavigateTab={setActiveTab}
               />
             )}
 
@@ -287,6 +290,22 @@ export default function App() {
 
             {activeTab === 'certificate' && (
               <CertificateView
+                userProfile={userProfile}
+                onOpenAuth={() => setIsAuthOpen(true)}
+                onSelectTab={setActiveTab}
+              />
+            )}
+
+            {activeTab === 'lor' && (
+              <LorView
+                userProfile={userProfile}
+                onOpenAuth={() => setIsAuthOpen(true)}
+                onSelectTab={setActiveTab}
+              />
+            )}
+
+            {activeTab === 'report' && (
+              <ProgressReportView
                 userProfile={userProfile}
                 onOpenAuth={() => setIsAuthOpen(true)}
                 onSelectTab={setActiveTab}

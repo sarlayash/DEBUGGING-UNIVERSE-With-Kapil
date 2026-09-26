@@ -96,12 +96,30 @@ export default function Footer({ onOpenAuth, onSelectTab, onOpenSitemap, onOpenT
             <p className="text-[11px] text-slate-500 leading-relaxed">
               Certification issued exclusively to verified Google accounts that demonstrate full mastery and complete the final 3-hour non-repeated proctored challenge.
             </p>
-            <div className="pt-1">
+            <div className="pt-2 flex flex-col gap-1">
+              <button 
+                onClick={() => onSelectTab('badges')}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-slate-950 hover:underline"
+              >
+                &bull; Verified Badges (PNG & PDF) &rarr;
+              </button>
               <button 
                 onClick={() => onSelectTab('certificate')}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-900 hover:underline"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-slate-950 hover:underline"
               >
-                Inspect Certificate Verification Standards &rarr;
+                &bull; Executive Certificate (PNG & PDF) &rarr;
+              </button>
+              <button 
+                onClick={() => onSelectTab('lor')}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-slate-950 hover:underline"
+              >
+                &bull; Official Letter of Recommendation (LOR) &rarr;
+              </button>
+              <button 
+                onClick={() => onSelectTab('report')}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-slate-950 hover:underline"
+              >
+                &bull; Detailed Diagnostic Audit Report &rarr;
               </button>
             </div>
           </div>

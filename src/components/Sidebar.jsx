@@ -18,7 +18,9 @@ import {
   Layers,
   Compass,
   Map,
-  Users
+  Users,
+  FileText,
+  BarChart3
 } from 'lucide-react';
 import kapilPortrait from '../assets/kapil-portrait.jpg';
 
@@ -114,7 +116,7 @@ export default function Sidebar({
       id: 'badges',
       label: 'Earned Badges',
       icon: Award,
-      badge: 'Verified',
+      badge: 'PNG & PDF',
       description: 'Official badges signed by Kapil'
     },
     {
@@ -129,9 +131,25 @@ export default function Sidebar({
       id: 'certificate',
       label: 'Executive Certificate',
       icon: CheckCircle2,
-      badge: assessmentStatus?.passed ? 'Unlocked' : 'Locked',
-      badgeColor: assessmentStatus?.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500',
+      badge: assessmentStatus?.passed ? 'Unlocked' : 'PNG & PDF',
+      badgeColor: assessmentStatus?.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700 border-slate-200',
       description: 'Issued by Kapil upon completion'
+    },
+    {
+      id: 'lor',
+      label: 'Letter of Rec (LOR)',
+      icon: FileText,
+      badge: 'Official PDF',
+      badgeColor: 'bg-slate-100 text-slate-800 border-slate-200',
+      description: 'Executive recommendation by Kapil'
+    },
+    {
+      id: 'report',
+      label: 'Detailed Progress Report',
+      icon: BarChart3,
+      badge: 'Audit PDF',
+      badgeColor: 'bg-slate-100 text-slate-800 border-slate-200',
+      description: '14-Domain diagnostic audit report'
     }
   ];
 

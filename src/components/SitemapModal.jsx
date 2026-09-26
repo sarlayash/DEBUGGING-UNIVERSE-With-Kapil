@@ -73,9 +73,11 @@ export default function SitemapModal({ isOpen, onClose, onSelectTab }) {
       items: [
         { label: 'Fortune 500 Placement Arena', tab: 'interviews', desc: 'Staff SWE debugging rounds: Google, Meta, Stripe, Amazon' },
         { label: 'Fortune 500 Bonus Wheel', tab: 'wheel', desc: 'Daily spins for bonus IQ points, streak shields, free hint tokens' },
-        { label: 'Learner Verified Badges', tab: 'badges', desc: 'Authentic badges signed by Kapil (No fake personas)' },
+        { label: 'Learner Verified Badges (PNG & PDF)', tab: 'badges', desc: 'Authentic badges signed by Kapil with instant PNG & PDF export' },
         { label: '3-Hour Proctored Final Assessment', tab: 'assessment', desc: '180:00 timer, per-question clock, anti-screenshot & Alt+Tab auto-close' },
-        { label: 'Executive Certificate Generator', tab: 'certificate', desc: 'Printable & PDF export, exclusive Kapil signature, verification hash' },
+        { label: 'Executive Certificate Generator (PNG & PDF)', tab: 'certificate', desc: 'Printable, PNG & PDF export, exclusive Kapil signature, verification hash' },
+        { label: 'Letter of Recommendation (LOR in PDF)', tab: 'lor', desc: 'Formal executive recommendation signed and sealed by Kapil for DEMO & verified learners' },
+        { label: 'Detailed Progress & Audit Report (PDF)', tab: 'report', desc: 'Individual PDF breakdown across all 14 languages, test suites, and proctor logs' },
         { label: 'WIIFM Stakeholder Value Hub', tab: 'wiifm', desc: 'Tailored ROI for learners, professionals, TPOs, recruiters & CXOs' }
       ]
     }
