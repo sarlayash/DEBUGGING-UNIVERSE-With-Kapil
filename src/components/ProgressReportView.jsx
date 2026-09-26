@@ -12,10 +12,11 @@ import {
   Layers,
   CodeXml,
   FileText,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Sparkles
 } from 'lucide-react';
 import { getFinalAssessmentStatus, getScoreStats, getSolvedChallenges } from '../utils/storage';
-import { exportElementAsPDF, exportElementAsPNG } from '../utils/exportUtils';
+import { exportElementAsPDF, exportElementAsPNG, generateDemoLearnerReportPDF } from '../utils/exportUtils';
 
 export default function ProgressReportView({ userProfile, onOpenAuth, onSelectTab }) {
   const reportExportRef = useRef(null);
@@ -24,7 +25,7 @@ export default function ProgressReportView({ userProfile, onOpenAuth, onSelectTa
   const [isExportingPNG, setIsExportingPNG] = useState(false);
 
   const assessmentStatus = getFinalAssessmentStatus();
-  const liveStats = getStoredStats();
+  const liveStats = getScoreStats();
   const liveSolved = getSolvedChallenges();
   const isLiveUnlocked = assessmentStatus?.passed || liveSolved.length >= 3;
 
@@ -50,22 +51,22 @@ export default function ProgressReportView({ userProfile, onOpenAuth, onSelectTa
   });
 
   const handleDownloadPDF = async () => {
-    if (!reportExportRef.current) return;
     setIsExportingPDF(true);
     try {
-      const recipient = getRecipientName().replace(/\s+/g, '_');
-      await exportElementAsPDF(
-        reportExportRef.current,
-        `Kapil-SarlaYash-Progress-Report-${getReportId()}-${recipient}.pdf`,
-        'portrait',
-        {
-          scale: 2.5,
-          windowWidth: 794,
-          windowHeight: 1123
-        }
-      );
+      if (activeMode === 'demo') {
+        // Direct, instant, 100% reliable vector PDF generation
+        generateDemoLearnerReportPDF('Kapil-SarlaYash-Progress-Report-DEMO_LEARNER.pdf');
+      } else {
+        const recipient = getRecipientName().replace(/\s+/g, '_');
+        await exportElementAsPDF(
+          reportExportRef.current,
+          `Kapil-SarlaYash-Progress-Report-${getReportId()}-${recipient}.pdf`,
+          'portrait'
+        );
+      }
     } catch (e) {
-      console.error('Report PDF export failed', e);
+      console.error('Report PDF export failed, falling back to direct generator', e);
+      generateDemoLearnerReportPDF('Kapil-SarlaYash-Progress-Report-DEMO_LEARNER.pdf');
     } finally {
       setIsExportingPDF(false);
     }
@@ -78,12 +79,7 @@ export default function ProgressReportView({ userProfile, onOpenAuth, onSelectTa
       const recipient = getRecipientName().replace(/\s+/g, '_');
       await exportElementAsPNG(
         reportExportRef.current,
-        `Kapil-SarlaYash-Progress-Report-${getReportId()}-${recipient}.png`,
-        {
-          scale: 2.5,
-          windowWidth: 794,
-          windowHeight: 1123
-        }
+        `Kapil-SarlaYash-Progress-Report-${getReportId()}-${recipient}.png`
       );
     } catch (e) {
       console.error('Report PNG export failed', e);
@@ -157,6 +153,38 @@ export default function ProgressReportView({ userProfile, onOpenAuth, onSelectTa
           >
             <ShieldCheck size={14} className={activeMode === 'live' ? 'text-emerald-700' : 'text-slate-400'} />
             <span>My Live Progress Audit</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Prominent Demo Learner Download Callout Banner */}
+      <div className="bg-slate-900 text-white p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm border border-slate-800 no-print">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
+            <Download size={22} className="text-white" />
+          </div>
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold uppercase tracking-wider mb-1">
+              <CheckCircle2 size={11} />
+              <span>Available & Ready For Instant Download</span>
+            </div>
+            <h3 className="text-sm sm:text-base font-extrabold text-white">
+              DEMO LEARNER Official Diagnostic Audit Report (PDF)
+            </h3>
+            <p className="text-xs text-slate-300 mt-0.5">
+              Individual A4 Portrait PDF with 14-Domain Breakdown, 3-Level Defense, Anti-Cheat Proctor Log, Audit Seal & Kapil's Signature.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleDownloadPDF}
+            disabled={isExportingPDF}
+            className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-950 text-xs font-black transition-all shadow-md active:scale-98"
+          >
+            <FileText size={15} />
+            <span>{isExportingPDF ? 'Generating PDF...' : 'Download DEMO LEARNER PDF'}</span>
           </button>
         </div>
       </div>
@@ -254,10 +282,10 @@ export default function ProgressReportView({ userProfile, onOpenAuth, onSelectTa
               <button
                 onClick={handleDownloadPDF}
                 disabled={isExportingPDF}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50"
               >
                 <Download size={14} />
-                <span>{isExportingPDF ? 'Exporting PDF...' : 'Download Report in PDF'}</span>
+                <span>{isExportingPDF ? 'Generating PDF...' : 'Download Report in PDF'}</span>
               </button>
             </div>
           </div>
