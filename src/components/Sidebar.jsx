@@ -14,7 +14,11 @@ import {
   ChevronRight,
   ExternalLink,
   Flame,
-  UserCheck
+  UserCheck,
+  Layers,
+  Compass,
+  Map,
+  Users
 } from 'lucide-react';
 
 export default function Sidebar({ 
@@ -26,9 +30,27 @@ export default function Sidebar({
   onOpenAuth,
   stats,
   assessmentStatus,
-  onOpenWheel
+  onOpenWheel,
+  onOpenTour,
+  onOpenSitemap
 }) {
   const navItems = [
+    {
+      id: 'levels',
+      label: '3-Level Journey',
+      icon: Layers,
+      badge: 'Gated',
+      badgeColor: 'bg-blue-50 text-blue-800 border-blue-200',
+      description: 'L1 Foundation, L2 Systems, L3 Defense'
+    },
+    {
+      id: 'mcq',
+      label: 'MCQ Diagnostic Arena',
+      icon: Code2,
+      badge: '14+ Domains',
+      badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      description: '10 Easy, 10 Med, 10 Hard per language'
+    },
     {
       id: 'practice',
       label: 'Practice Arena',
@@ -63,6 +85,13 @@ export default function Sidebar({
       icon: Briefcase,
       badge: 'Placements',
       description: 'Google, Meta, Stripe mock rounds'
+    },
+    {
+      id: 'wiifm',
+      label: 'WIIFM Stakeholder Hub',
+      icon: Users,
+      badge: 'All Roles',
+      description: 'Value for Learners, TPOs, HR & CXOs'
     },
     {
       id: 'wheel',
@@ -256,9 +285,30 @@ export default function Sidebar({
         })}
       </nav>
 
+      {/* Tour & Sitemap Quick Launchers */}
+      <div className="p-3 border-t border-slate-200 space-y-1.5">
+        <button
+          onClick={onOpenTour}
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
+          title="Start Guided Platform Tour"
+        >
+          <Compass size={16} className="text-blue-600 shrink-0" />
+          {!collapsed && <span>Guided Demo Tour</span>}
+        </button>
+
+        <button
+          onClick={onOpenSitemap}
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
+          title="View Architectural Platform Sitemap"
+        >
+          <Map size={16} className="text-emerald-600 shrink-0" />
+          {!collapsed && <span>Platform Sitemap</span>}
+        </button>
+      </div>
+
       {/* Footer Info in Sidebar */}
       {!collapsed && (
-        <div className="p-3 border-t border-slate-200 text-center">
+        <div className="p-3 border-t border-slate-200 text-center bg-slate-50/50">
           <div className="text-[11px] font-medium text-slate-500">
             Sole Signatory & Architect
           </div>

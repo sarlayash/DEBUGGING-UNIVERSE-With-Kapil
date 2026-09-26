@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Award, Terminal, Lock, ExternalLink } from 'lucide-react';
 
-export default function Footer({ onOpenAuth, onSelectTab }) {
+export default function Footer({ onOpenAuth, onSelectTab, onOpenSitemap, onOpenTour }) {
   return (
     <footer className="bg-white border-t border-slate-200 mt-auto text-slate-600 text-xs">
       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -27,17 +27,22 @@ export default function Footer({ onOpenAuth, onSelectTab }) {
           {/* Academic & Curriculum Standards */}
           <div className="space-y-2">
             <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wider">
-              Curriculum Tracks
+              Diagnostic Curriculum
             </h4>
             <ul className="space-y-1.5 text-[11px]">
               <li>
-                <button onClick={() => onSelectTab('practice')} className="hover:text-slate-900 transition-colors">
-                  Multi-Language Systems (Go, Rust, C++, Java)
+                <button onClick={() => onSelectTab('levels')} className="hover:text-slate-900 font-medium transition-colors">
+                  3-Level Gated Journey (L1, L2, L3)
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('practice')} className="hover:text-slate-900 transition-colors">
-                  Agentic AI Portals (Claude Code, Cursor, Gemini)
+                <button onClick={() => onSelectTab('mcq')} className="hover:text-slate-900 font-medium transition-colors">
+                  MCQ Diagnostic Arena (14+ Domains)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab('wiifm')} className="hover:text-slate-900 font-medium transition-colors">
+                  WIIFM Value Matrix (Learners to CXOs)
                 </button>
               </li>
               <li>
@@ -102,13 +107,19 @@ export default function Footer({ onOpenAuth, onSelectTab }) {
           <div>
             &copy; 2026 <strong>DEBUGGING UNIVERSE With Kapil</strong>. Powered By <strong>SarlaYash Mission</strong>. All rights reserved.
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <button onClick={onOpenTour} className="hover:text-slate-900 font-semibold underline transition-colors">
+              Guided Demo Tour
+            </button>
+            <button onClick={onOpenSitemap} className="hover:text-slate-900 font-semibold underline transition-colors">
+              Platform Sitemap
+            </button>
             <span className="inline-flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
               Proctoring Engine Online
             </span>
-            <span>Google Single Sign-On Enforced</span>
-            <span>Version 2.6.4 (Enterprise)</span>
+            <span>Google SSO Enforced</span>
+            <span>Version 2.7.0 (Enterprise)</span>
           </div>
         </div>
       </div>

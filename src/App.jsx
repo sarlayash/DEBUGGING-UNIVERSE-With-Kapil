@@ -12,6 +12,11 @@ import InterviewsHub from './components/InterviewsHub';
 import BadgesHub from './components/BadgesHub';
 import FinalAssessment from './components/FinalAssessment';
 import CertificateView from './components/CertificateView';
+import ThreeLevelsJourney from './components/ThreeLevelsJourney';
+import McqArena from './components/McqArena';
+import WiifmHub from './components/WiifmHub';
+import DemoTourModal from './components/DemoTourModal';
+import SitemapModal from './components/SitemapModal';
 
 import { CHALLENGES_DATA } from './data/challengesData';
 import { 
@@ -36,6 +41,8 @@ export default function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isWheelOpen, setIsWheelOpen] = useState(false);
+  const [isTourOpen, setIsTourOpen] = useState(false);
+  const [isSitemapOpen, setIsSitemapOpen] = useState(false);
   
   const [userProfile, setUserProfile] = useState(getUserProfile());
   const [solvedChallenges, setSolvedChallenges] = useState(getSolvedChallenges());
@@ -156,6 +163,8 @@ export default function App() {
         stats={stats}
         assessmentStatus={assessmentStatus}
         onOpenWheel={() => setIsWheelOpen(true)}
+        onOpenTour={() => setIsTourOpen(true)}
+        onOpenSitemap={() => setIsSitemapOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -166,6 +175,8 @@ export default function App() {
           onOpenAuth={() => setIsAuthOpen(true)}
           onLogout={handleLogout}
           onOpenWheel={() => setIsWheelOpen(true)}
+          onOpenTour={() => setIsTourOpen(true)}
+          onOpenSitemap={() => setIsSitemapOpen(true)}
           stats={stats}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -177,6 +188,16 @@ export default function App() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex flex-col">
           <div className="flex-1 max-w-7xl w-full mx-auto">
             {/* View Switcher */}
+            {activeTab === 'levels' && (
+              <ThreeLevelsJourney
+                onNavigateTab={setActiveTab}
+              />
+            )}
+
+            {activeTab === 'mcq' && (
+              <McqArena />
+            )}
+
             {activeTab === 'practice' && (
               <PracticeHub
                 onSelectChallenge={handleSelectChallenge}
@@ -233,6 +254,12 @@ export default function App() {
               />
             )}
 
+            {activeTab === 'wiifm' && (
+              <WiifmHub
+                onSelectTab={setActiveTab}
+              />
+            )}
+
             {activeTab === 'badges' && (
               <BadgesHub
                 userProfile={userProfile}
@@ -263,6 +290,8 @@ export default function App() {
             <Footer
               onOpenAuth={() => setIsAuthOpen(true)}
               onSelectTab={setActiveTab}
+              onOpenTour={() => setIsTourOpen(true)}
+              onOpenSitemap={() => setIsSitemapOpen(true)}
             />
           )}
         </main>
@@ -280,6 +309,20 @@ export default function App() {
         isOpen={isWheelOpen}
         onClose={() => setIsWheelOpen(false)}
         onRewardEarned={handleRewardEarned}
+      />
+
+      {/* Guided Demo Tour Modal */}
+      <DemoTourModal
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        onSelectTab={setActiveTab}
+      />
+
+      {/* Architectural Platform Sitemap Modal */}
+      <SitemapModal
+        isOpen={isSitemapOpen}
+        onClose={() => setIsSitemapOpen(false)}
+        onSelectTab={setActiveTab}
       />
     </div>
   );

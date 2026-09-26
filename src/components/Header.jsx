@@ -9,7 +9,9 @@ import {
   User,
   LogOut,
   HelpCircle,
-  Clock
+  Clock,
+  Compass,
+  Map
 } from 'lucide-react';
 
 export default function Header({ 
@@ -17,6 +19,8 @@ export default function Header({
   onOpenAuth, 
   onLogout,
   onOpenWheel, 
+  onOpenTour,
+  onOpenSitemap,
   stats, 
   searchQuery, 
   setSearchQuery,
@@ -38,7 +42,27 @@ export default function Header({
       </div>
 
       {/* Center / Right Control Panel */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Demo Tour Button */}
+        <button
+          onClick={onOpenTour}
+          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
+          title="Start Guided Platform Tour"
+        >
+          <Compass size={14} className="text-blue-600" />
+          <span>Demo Tour</span>
+        </button>
+
+        {/* Sitemap Button */}
+        <button
+          onClick={onOpenSitemap}
+          className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-colors"
+          title="Open Full Architectural Sitemap"
+        >
+          <Map size={14} className="text-emerald-600" />
+          <span>Sitemap</span>
+        </button>
+
         {/* Negative Marking Rule Indicator */}
         <div 
           className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 border border-slate-200 text-[11px] text-slate-700"
