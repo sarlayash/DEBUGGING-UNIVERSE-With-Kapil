@@ -71,6 +71,26 @@ export async function signInWithGoogleFirebase() {
 
     return { success: true, profile };
   } catch (error) {
+    // If the user closed the popup window after successfully signing in,
+    // auth.currentUser will be non-null! Detect and return success immediately!
+    if (auth.currentUser) {
+      const user = auth.currentUser;
+      const profile = {
+        uid: user.uid,
+        name: user.displayName || 'Google Verified Learner',
+        email: user.email,
+        photo: user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.displayName || 'User')}&backgroundColor=0f172a&textColor=ffffff`,
+        authProvider: 'Google OAuth 2.0 (Firebase)',
+        googleId: user.uid,
+        verifiedAt: new Date().toISOString()
+      };
+      try {
+        const userRef = doc(db, 'learners', user.uid);
+        await setDoc(userRef, { profile, lastActive: new Date().toISOString() }, { merge: true });
+      } catch (fsError) {}
+      return { success: true, profile };
+    }
+
     console.error('Firebase Google Auth error:', error);
     return { 
       success: false, 
